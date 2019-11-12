@@ -1,4 +1,4 @@
-N = 1024
+N = 1024;
 for n = 1:N
     m = (n-1) / N;
     g(n) = 20 * m^2 * (1-m)^4 * cos(12*pi*m);
@@ -39,7 +39,7 @@ hold off
 %nivel 2
 
 
-N = 512
+N = 512;
 i = 1;
 media2 = zeros(256,1);
 detalhe2 = zeros(256,1);

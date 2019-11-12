@@ -1,0 +1,37 @@
+function [T] = MultiLevelOtsu(img, n)
+
+% Calculate Histogram of Image
+H = imhist(uint8(img));
+a = size(H, 2);
+b = size(H, 1);
+T = [zeros(1, n)];    
+% Step 1 : Repeat recursivly Step 2-6 n/2-1 times
+for i = 1:n/2-1
+
+    % Step 2 : Define & Update Range
+    R = [a:b]';
+
+    % Step 3 : Find mean & std of all pixels in R
+    mu = mean(R);
+    sigma = std(R);
+
+    % Step 4 : Sub-ranges T1 & T2
+    T1 = mu - 1*sigma;
+    T2 = mu + 1*sigma;
+
+    % Step 5 : Threshold Calculation
+    T(i) = floor((ceil(otsuthresh(H(a:T1))*256)+ceil(otsuthresh(H(T2:b))*256))/2);
+
+    % Step 6 : Update a & b
+    a = T1+1;
+    b = T2-1; 
+
+end
+
+% Step 7 : Update Step 5
+T1 = mu;
+T2 = mu+1;
+T = floor((ceil(otsuthresh(H(a:T1))*256)+ceil(otsuthresh(H(T2:b))*256))/2);
+
+
+end
