@@ -27,7 +27,6 @@ for x = 1:l
         
         %--theta
         else
-                %denominador aux
                 aux1 = (0.5*((r-g)+(r-b)))
                 aux2 = sqrt( (r-g)^2 + ((r-g)*(g-b)) );
                 
