@@ -54,6 +54,7 @@ end
 colormap(gray);
 figure;
 imagesc(resultante);
+colormap(gray);
 title('Imagem Resultante');
 message = sprintf('Limiar %d.', T_i);
 uiwait(helpdlg(message));

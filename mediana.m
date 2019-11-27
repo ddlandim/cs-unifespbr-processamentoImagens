@@ -2,7 +2,7 @@ function[x] = mediana(img, n)
 
 [linha,coluna] = size(img);
 x = zeros(linha,coluna);
-vetor = zeros(1,n);
+vetor = zeros(1,(n^2));
 
 for i = 1:linha
     for j = 1:coluna
@@ -15,7 +15,7 @@ for i = 1:linha
                end
            end
            vetor = sort(vetor);
-           x(i,j) = vetor(n);
+           x(i,j) = vetor(round((n^2),2));
         else
             x(i,j) = img(i,j);
         end
