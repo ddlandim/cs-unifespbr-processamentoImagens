@@ -24,19 +24,19 @@ title('Filtro da Mediana com janela %d na imagem original');
 imagemSegmentada = ~imagemSegmentada;
 figure;
 colormap(gray);
-imagesc(imagemBinaria);
+imagesc(imagemSegmentada);
 title('Segmentação Invertida por Otsu com Limiar Global= %d');
 
-imagemErodida = ~erosao(imagemBinaria,'disk',1);
+imagemErodida = ~erosao(imagemSegmentada,'disk',1);
 figure;
 colormap(gray);
 imagesc(imagemErodida);
 title('Imagem Segmentada Erodida');
 
-imagemContorno = imagemBinaria - uint8(imagemErodida);
+imagemContorno = imagemSegmentada - imagemErodida;
 figure;
 colormap(gray);
-imagesc(imagemBorda);
+imagesc(imagemContorno);
 title('Imagem só Contorno');
 
 %pegar os componentes conexos, ordenados

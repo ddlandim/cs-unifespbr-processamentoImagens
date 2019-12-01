@@ -1,4 +1,20 @@
-function[x] = mediana(img, n)
+clc
+close all
+clear all
+
+%imagem original
+imagem = imread('placa.png');
+imagem = rgb2gray(imagem);
+figure;
+colormap(gray);
+imagesc(imagem);
+title('Imagem Original em escala de cinza');
+
+%aplicando filtro da mediana na imagem original
+janela = 5;
+
+img = imagem;
+n = janela;
 
 [linha,coluna] = size(img);
 x = zeros(linha,coluna);
@@ -25,4 +41,7 @@ for i = 1:linha
     end
 end
 
-return;
+figure;
+colormap(gray);
+imagesc(x);
+title('Filtro da Mediana com janela %d na imagem original');
