@@ -1,18 +1,21 @@
-function[img_out] = erosao(img_in,nome_estruturante,tamanho)
-
-%getnhood - pega os n-vizinhos
-estrutura = getnhood(strel(nome_estruturante,tamanho));
-
-m = floor(size(estrutura,1)/2);
-n = floor(size(estrutura,2)/2);
-
-img_in_pad = padarray(img_in,[m n],1);
-
-img_out = false(size(img_in));
-
-for i=1:size(img_in_pad,1)-(2*m)
-    for j=1:size(img_in_pad,2)-(2*n)
-        aux = img_in_pad(i:i+(2*m),j:j+(2*n));
-        img_out(i,j) = min(min(aux-estrutura));
+function[img_erodida] = erosao(img,obj_estrutura)
+%im_in tem que ser binaria
+%elemento_estruturante, ex: strel('disk',1);
+    elemento_estruturante = getnhood(obj_estrutura);
+    
+    [linha_janela, coluna_janela] = size(elemento_estruturante); 
+    
+    img_erodida = zeros(size(img, 1), size(img, 2)); 
+    
+    for i = ceil(linha_janela/2) : size(img, 1) - floor(linha_janela/2) 
+        for j = ceil(coluna_janela/2) : size(img, 2) - floor(coluna_janela/2) 
+            
+            janela = img(i-floor(linha_janela/2):i+floor(linha_janela/2), j-floor(coluna_janela/2):j+floor(coluna_janela/2)); 
+            
+            comparacao = janela(logical(elemento_estruturante)); 	
+            
+            img_erodida(i, j) = min(comparacao(:));
+            
+        end
     end
 end

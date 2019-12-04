@@ -1,5 +1,4 @@
 function[x] = mediana(img, n)
-
 [linha,coluna] = size(img);
 x = zeros(linha,coluna);
 vector_n = n*n;

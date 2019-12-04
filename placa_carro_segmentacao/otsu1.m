@@ -2,8 +2,8 @@ function [outputArg1,outputArg2] = otsu1(I)
 % OTSU1 outputArg1 = imagem binarizada, outputArg2 = limiar encontrado
 %   Este algoritmo calculada apenas 1 limiar
 
-L = double(max(max(I))); %nivel de cinza máximo
-minimo = double(min(min(I))); %nivel de cinza minimo
+L = 255; %nivel de cinza máximo
+minimo = 0; %nivel de cinza minimo
 
 vetorProb = zeros(minimo+1,L+1);
 

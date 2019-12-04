@@ -2,42 +2,82 @@ clc
 close all
 clear all
 
-%imagem original
-imagem = imread('placa.png');
-imagem = rgb2gray(imagem);
+%imresize
+%imnoise
+load imgfildata;
+[arquivo,caminho] = uigetfile({'*.jpg;*.bmp;*.png;*.tif'},'Choose an image');
+path_file = [caminho,arquivo];
+img = imread(path_file);
+img = imresize(imagem,[300 900]);
+img = rgb2gray(imagem);
+
 figure;
 colormap(gray);
-imagesc(imagem);
+imagesc(img);
 title('Imagem Original em escala de cinza');
+
+[sizey,sizex] = size(img);
 
 %aplicando filtro da mediana na imagem original
 janela = 5;
-imagemFiltrada = mediana(imagem,janela);
+img_med = mediana(img,janela);
 figure;
 colormap(gray);
-imagesc(imagemFiltrada); 
-title('Filtro da Mediana com janela %d na imagem original');
+imagesc(img_med);
+title(['Filtro da Mediana com janela ',num2str(janela),' na imagem original']);
+
+[img_med_hist,pmax,pmin] = histograma(img_med);
+stem(0:255, img_med_hist);
+grid on; 
+ylabel('Frequencia do pixel --->'); 
+xlabel('Intensidade --->'); 
+title('HISTOGRAMA');
 
 %binarizando com otsu em 1 limiar
-[imagemSegmentada,limiarGlobal] = otsu1(imagemFiltrada);
+[img_seg,limiarGlobal] = otsu1(img_med);
 %invertendo imagem segmentada
-imagemSegmentada = ~imagemSegmentada;
+img_seg = ~img_seg;
 figure;
 colormap(gray);
-imagesc(imagemSegmentada);
-title('Segmentação Invertida por Otsu com Limiar Global= %d');
+imagesc(img_seg);
+title(['Segmentação Invertida por Otsu com Limiar Global = ',num2str(limiarGlobal)]);
 
-imagemErodida = ~erosao(imagemSegmentada,'disk',1);
+n_maiores = 7;
+img_seg_cc = bwareafilt(img_seg,n_maiores);
+figure
+colormap(gray);
+imagesc(img_seg_cc);
+title(['Imagem com os ', num2str(n_maiores), ' maiores componentes conexos']);
+
+elemento_estruturante = strel('disk',1);
 figure;
 colormap(gray);
-imagesc(imagemErodida);
-title('Imagem Segmentada Erodida');
+imagesc(getnhood(elemento_estruturante));
+title('Elemento Estruturante');
 
-imagemContorno = imagemSegmentada - imagemErodida;
+n_fec = 1;
+img_fec = fechamento(img_seg_cc,elemento_estruturante,n_fec);
 figure;
 colormap(gray);
-imagesc(imagemContorno);
-title('Imagem só Contorno');
+imagesc(img_fec);
+title(['Imagem com ', num2str(n_fec), ' fechamento(s)']);
 
-%pegar os componentes conexos, ordenados
-%manter os 7 maiores
+img_2 = img_fec;
+
+grad_interno = img_2 - erosao(img_2,elemento_estruturante);
+figure;
+colormap(gray);
+imagesc(grad_interno);
+title(['Gradiente interno']);
+
+grad_externo = dilatacao(img_2,elemento_estruturante) - img_2;
+figure;
+colormap(gray);
+imagesc(grad_externo);
+title(['Gradiente externo']);
+
+grad_morfologico = grad_externo - grad_interno;
+figure;
+colormap(gray);
+imagesc(grad_morfologico);
+title(['Gradiente morfologico']);
