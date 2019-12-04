@@ -2,42 +2,45 @@ clc
 close all
 clear all
 
- %imagem original
- img0 = imread('0.jpg');
- img1 = imread('1.jpg'); 
- img2 = imread('2.jpg'); 
- img3 = imread('3.jpg'); 
- img4 = imread('4.jpg');
- img5 = imread('5.jpg');
- img6 = imread('6.jpg');
- img7 = imread('7.jpg');
- img8 = imread('8.jpg');
- img9 = imread('9.jpg');
+imagens{1} = '0.jpg';
+imagens{2} = '1.jpg';
+imagens{3} = '2.jpg';
+imagens{4} = '3.jpg';
+imagens{5} = '4.jpg';
+imagens{6} = '5.jpg';
+imagens{7} = '6.jpg';
+imagens{8} = '7.jpg';
+imagens{9} = '8.jpg';
+imagens{10} = '9.jpg';
 
- img = rgb2gray(img0);
+debug = false;
+for i = 2:2
+ %imagem original
+ img = rgb2gray(imread(imagens{i}));
  %img = imresize(img,[300 900]);
  figure;
  colormap(gray);
  imagesc(img);
- title('Imagem Original em escala de cinza');
+ title(['Imagem ', num2str(i), '.jpg original em escala de cinza']);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 1A ETAPA %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %FILTRAGEM DE RUÍDO NA IMAGEM NÃO BINARIZADA
 %FILTRO DA MEDIANA
  janela = 5;
  img_med = mediana(img,janela);
- figure;
- colormap(gray);
- imagesc(img_med);
- title(['Filtro da Mediana com janela ',num2str(janela),' na imagem original']);
-
- [img_med_hist,pmax,pmin] = histograma(img_med);
- stem(0:255, img_med_hist);
- grid on; 
- ylabel('Frequencia do pixel --->'); 
- xlabel('Intensidade --->'); 
- title('HISTOGRAMA');
-
+ if(debug)
+     figure;
+     colormap(gray);
+     imagesc(img_med);
+     title(['Filtro da Mediana com janela ',num2str(janela),' na imagem original']);
+ 
+     [img_med_hist,pmax,pmin] = histograma(img_med);
+     stem(0:255, img_med_hist);
+     grid on; 
+     ylabel('Frequencia do pixel --->'); 
+     xlabel('Intensidade --->'); 
+     title('HISTOGRAMA');
+ end
  img_etapa1 = img_med;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 2A ETAPA %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -47,30 +50,33 @@ clear all
 
 %INVERTENDO A IMAGEM BINARIZADA
  img_bin = ~img_bin;
- figure;
- colormap(gray);
- imagesc(img_bin);
- title(['Binarização por Otsu com Limiar Global = ',num2str(limiarGlobal), 'imagem invertida']);
-
+ if(debug)
+    figure;
+    colormap(gray);
+    imagesc(img_bin);
+    title(['Binarização por Otsu com Limiar Global = ',num2str(limiarGlobal), 'imagem invertida']);
+ end
  img_etapa2 = img_bin;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 3A ETAPA %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %FILTRAGEM DE BURACOS E ELEMENTOS NÃO INTERESSANTES NA IMAGEM BINARIZADA
 
 %ESCOLHA DE UM ELEMENTO ESTRUTURAMENTE
- elemento_estruturante_filtro = strel('square',5);
+ nome_elemento = 'square';
+ tam_elem = 15;
+ elemento_estruturante_filtro = strel(nome_elemento,tam_elem);
  %figure;
  %colormap(gray);
  %imagesc(getnhood(elemento_estruturante));
  %title('Elemento Estruturante');
 
-%OPERAÇÃO MORFOLÓGICA DE FECHAMENTO COM O ELEMENTO ESCOLHIDO
- n_fil_fec = 3;
- img_bin_filtrada = fechamento(img_etapa2,elemento_estruturante_filtro,n_fil_fec);
+%OPERAÇÃO MORFOLÓGICA COM O ELEMENTO ESCOLHIDO
+ n_op = 3;
+ img_bin_filtrada = abertura(img_etapa2,elemento_estruturante_filtro,n_op);
  figure;
  colormap(gray);
  imagesc(img_bin_filtrada);
- title(['Imagem com ', num2str(n_fil_fec), ' fechamento(s)']);
+ title(['Imagem com ', num2str(n_op), ' operacoes(s) e elemento estruturante = ', nome_elemento, ' tamanho ', num2str(tam_elem)]);
 
  img_etapa3 = img_bin_filtrada;
 
@@ -123,12 +129,14 @@ clear all
  %imagesc(grad_externo);
  %title(['Gradiente externo']);
 
+ 
  grad_morfologico = grad_externo - grad_interno;
- figure;
- colormap(gray);
- imagesc(grad_morfologico);
- title(['Gradiente morfologico']);
-
+ if(debug)
+     figure;
+     colormap(gray);
+     imagesc(grad_morfologico);
+     title(['Gradiente morfologico']);
+ end
  [Dice,Jaccard,x,y] = dice_jaccard_plot(img,img_etapa4,grad_morfologico);
 
  figure
@@ -136,3 +144,4 @@ clear all
  hold on
      plot(y,x,'.g','LineWidth',2);
  title( ['Imagem final segmentada, métricas: Dice = ',num2str(Dice),' Jaccard = ',num2str(Jaccard)] );
+end
