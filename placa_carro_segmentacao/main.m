@@ -14,14 +14,14 @@ imagens{9} = '8.jpg';
 imagens{10} = '9.jpg';
 
 debug = false;
-for i = 2:2
+for i = 1:2
  %imagem original
  img = rgb2gray(imread(imagens{i}));
  %img = imresize(img,[300 900]);
- figure;
- colormap(gray);
- imagesc(img);
- title(['Imagem ', num2str(i), '.jpg original em escala de cinza']);
+ %figure;
+ %colormap(gray);
+ %imagesc(img);
+ %title(['Imagem ', num2str(i), '.jpg original em escala de cinza']);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 1A ETAPA %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %FILTRAGEM DE RUÍDO NA IMAGEM NÃO BINARIZADA
@@ -63,7 +63,7 @@ for i = 2:2
 
 %ESCOLHA DE UM ELEMENTO ESTRUTURAMENTE
  nome_elemento = 'square';
- tam_elem = 15;
+ tam_elem = 5;
  elemento_estruturante_filtro = strel(nome_elemento,tam_elem);
  %figure;
  %colormap(gray);
@@ -76,7 +76,7 @@ for i = 2:2
  figure;
  colormap(gray);
  imagesc(img_bin_filtrada);
- title(['Imagem com ', num2str(n_op), ' operacoes(s) e elemento estruturante = ', nome_elemento, ' tamanho ', num2str(tam_elem)]);
+ title(['Imagem ', imagens{i} ,'  com ', num2str(n_op), ' operacoes(s) e elemento estruturante = ', nome_elemento, ' tamanho ', num2str(tam_elem)]);
 
  img_etapa3 = img_bin_filtrada;
 
@@ -92,10 +92,12 @@ for i = 2:2
 
  n_maiores = 7;
  img_seg_cc = bwareafilt(img_etapa3,n_maiores);
- figure
- colormap(gray);
- imagesc(img_seg_cc);
- title(['Imagem com os ', num2str(n_maiores), ' maiores componentes conexos']);
+ if(debug)
+     figure
+     colormap(gray);
+     imagesc(img_seg_cc);
+     title(['Imagem  ', imagens{i} ,' com os ', num2str(n_maiores), ' maiores componentes conexos']);
+ end
 
  img_etapa4 = img_seg_cc;
 
@@ -135,7 +137,7 @@ for i = 2:2
      figure;
      colormap(gray);
      imagesc(grad_morfologico);
-     title(['Gradiente morfologico']);
+     title(['Gradiente morfologico ', imagens{i} ,' ']);
  end
  [Dice,Jaccard,x,y] = dice_jaccard_plot(img,img_etapa4,grad_morfologico);
 
@@ -143,5 +145,5 @@ for i = 2:2
      imshow(img);
  hold on
      plot(y,x,'.g','LineWidth',2);
- title( ['Imagem final segmentada, métricas: Dice = ',num2str(Dice),' Jaccard = ',num2str(Jaccard)] );
+ title( ['Imagem ', imagens{i} ,' final segmentada, métricas: Dice = ',num2str(Dice),' Jaccard = ',num2str(Jaccard)] );
 end
