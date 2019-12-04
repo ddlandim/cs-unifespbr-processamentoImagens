@@ -1,4 +1,5 @@
 function[imagem_abertura] = abertura(img_in,obj_estruturante,n)
+    %function[imagem_abertura] = abertura(img_in,obj_estruturante,n)
     %im_in tem que ser binaria
     %objeto estruturante, ex: obj_estruturante = strel('disk',1);
     %n é quantidade de operacoes erosao-dilatacao

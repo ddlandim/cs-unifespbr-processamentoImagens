@@ -5,7 +5,7 @@ function[img_erodida] = erosao(img,obj_estrutura)
     
     [linha_janela, coluna_janela] = size(elemento_estruturante); 
     
-    img_erodida = zeros(size(img, 1), size(img, 2)); 
+    img_erodida = false(size(img, 1), size(img, 2));
     
     for i = ceil(linha_janela/2) : size(img, 1) - floor(linha_janela/2) 
         for j = ceil(coluna_janela/2) : size(img, 2) - floor(coluna_janela/2) 
@@ -14,7 +14,7 @@ function[img_erodida] = erosao(img,obj_estrutura)
             
             comparacao = janela(logical(elemento_estruturante)); 	
             
-            img_erodida(i, j) = min(comparacao(:));
+            img_erodida(i, j) = logical(min(comparacao(:)));
             
         end
     end

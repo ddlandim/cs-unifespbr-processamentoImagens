@@ -1,6 +1,9 @@
 function [outputArg1,outputArg2] = otsu1(I)
-% OTSU1 outputArg1 = imagem binarizada, outputArg2 = limiar encontrado
-%   Este algoritmo calculada apenas 1 limiar
+% OTSU1 function [outputArg1,outputArg2] = otsu1(I)
+% Este algoritmo calculada apenas 1 limiar
+% Utilizando limiares com 0 a 255
+% A utilizacao com Limiares max e min da imagem esta dando erro de indice
+% de calculo para as variancias.
 
 L = 255; %nivel de cinza máximo
 minimo = 0; %nivel de cinza minimo

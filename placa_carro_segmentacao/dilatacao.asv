@@ -6,8 +6,8 @@ function[img_dilatada] = dilatacao(img_in,elemento_estruturante)
     [linha_janela, coluna_janela]=size(estrutura);  
 
     % create a zero matrix of size I.         
-    img_dilatada = false(size(img_in, 1), size(img_in, 2));
-    
+    img_dilatada = logical(zeros(size(img_in, 1), size(img_in, 2))); 
+
     for i=ceil(linha_janela/2):size(img_in, 1)-floor(linha_janela/2) 
         for j=ceil(coluna_janela/2):size(img_in, 2)-floor(coluna_janela/2) 
 
