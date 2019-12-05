@@ -12,13 +12,13 @@ imagens{7} = '6.jpg';
 imagens{8} = '7.jpg';
 imagens{9} = '8.jpg';
 imagens{10} = '9.jpg';
-imagens{11} = 'frd4486.jpg';
+imagens{11} = 'frd4486
 
 debug = true;
 debug_hist = false;
 
-start = 11;
-n = 11;
+start = 1;
+n = 10;
 img_seg_out = cell(n, 5);
 
 for i = start:n
