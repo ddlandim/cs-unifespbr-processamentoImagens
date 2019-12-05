@@ -17,7 +17,7 @@ imagens{11} = 'frd4486.jpg';
 debug = true;
 debug_hist = false;
 
-start = 11;
+start = 1;
 n = 11;
 img_seg_out = cell(n, 5);
 
