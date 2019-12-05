@@ -14,7 +14,10 @@ imagens{9} = '8.jpg';
 imagens{10} = '9.jpg';
 
 debug = false;
-for i = 1:2
+start = 1;
+n = 2;
+img_seg_out = cell(n, 1);
+for i = start:n
  %imagem original
  img = rgb2gray(imread(imagens{i}));
  %img = imresize(img,[300 900]);
@@ -146,4 +149,8 @@ for i = 1:2
  hold on
      plot(y,x,'.g','LineWidth',2);
  title( ['Imagem ', imagens{i} ,' final segmentada, métricas: Dice = ',num2str(Dice),' Jaccard = ',num2str(Jaccard)] );
+ img_seg_out{i} = img_etapa4;
 end
+
+
+
