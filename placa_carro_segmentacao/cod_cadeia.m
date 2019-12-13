@@ -1,4 +1,5 @@
 function[vetor_cadeia] = cod_cadeia(img_in,n_objetos)
+%essa funcao recebe uma imagem binarizada e retorna um vetor de vetores do codigo da cadeia de freeman para 8 angulos.
     img_aux = padarray(img_in,[1 1],0,'both');
     [a,l] = size(img_in);
     vetor_cadeia = zeros(1,n_objetos);
